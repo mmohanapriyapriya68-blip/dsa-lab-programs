@@ -1,0 +1,51 @@
+#include <stdio.h>
+#include <ctype.h>
+
+#define MAX 100
+
+int stack[MAX];
+int top = -1;
+
+// Push
+void push(int x) {
+    stack[++top] = x;
+}
+
+// Pop
+int pop() {
+    return stack[top--];
+}
+
+int main() {
+    char exp[MAX];
+    int i, op1, op2, value;
+
+    printf("Enter postfix expression: ");
+    scanf("%s", exp);
+
+    for(i = 0; exp[i] != '\0'; i++) {
+        char ch = exp[i];
+
+        // If operand, push to stack
+        if(isdigit(ch)) {
+            push(ch - '0');   // convert char to int
+        }
+        else {
+            // Pop top two operands
+            op2 = pop();
+            op1 = pop();
+
+            switch(ch) {
+                case '+': value = op1 + op2; break;
+                case '-': value = op1 - op2; break;
+                case '*': value = op1 * op2; break;
+                case '/': value = op1 / op2; break;
+                case '%': value = op1 % op2; break;
+            }
+            push(value);
+        }
+    }
+
+    printf("Result = %d\n", pop());
+    return 0;
+}
